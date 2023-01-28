@@ -29,7 +29,10 @@ optional arguments:
 
 `pip3 install Mastodon.py` will install the required Mastodon Python libraries, 
 
-`pip install "pinboard>=2.0"` will install thre required Pinboard libriaries.
+`pip3 install "pinboard>=2.0"` will install thre required Pinboard libriaries.
+
+
+`pip3 install html2txt` will install the required [html2text library](https://github.com/Alir3z4/html2text) by Aaron Swartz.
 
 You will also need API tokens from both Pinboard and Mastodon. These are stored as text files with a `.secret` extension. (The `.secret` extension are included in the .gitignore so they are not checked into the repository). They should be kept in the same directory as the `masto-pinb.py` Python script.
   

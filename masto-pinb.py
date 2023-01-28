@@ -1,9 +1,9 @@
-#!/home/jtf/anaconda3/bin/python
+#!/usr/bin/python3
 
+# see documentation at https://github.com/headrotor/masto-pinb
 
 # pip3 install Mastodon.py
 # https://mastodonpy.readthedocs.io/en/stable/
-
 from mastodon import Mastodon
 
 #pip install "pinboard>=2.0"
