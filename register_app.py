@@ -15,8 +15,8 @@ Mastodon.create_app(
 
 mastodon = Mastodon(client_id = 'masto_pinb_clientcred.secret',)
 mastodon.log_in(
-    'MASTODON_USERID',
-    'MASTODON_PASSW',
+    'my_login_email@example.com',
+    'incrediblygoodpassword',
     to_file = 'masto_pinb_usercred.secret'
 )
 
