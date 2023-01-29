@@ -1,5 +1,5 @@
 # masto-pinb.py
-Mastodon To Pinboard bookmark integration script
+Mastodon To Pinboard bookmark integration script.
 
 This is a Python script meant to be run repeatedly as a crontab job. It reads the latest toots from a [Mastodon](http://mastodon.social) account and bookmarks them in a [Pinboard.in](http://pinboard.in) account. 
 
@@ -63,6 +63,6 @@ The Mastodon user credential file is stored as `masto_pinb_usercred.secret` and 
 
 Generated Files
 ---
-Several files are generated in the same directory as the `masto-pinb.py` Python script.  In order to avoid duplicating Pinboard API calls, the IDs of recently-bookmarked toots are stored in the local text files `cached_bmarks.secret`, `cached_toots.secret`, and `cached_favs.secret`. (Though not particulalry sensitive, these have the `.secret` extension so that git will ignore them via `.gitignore`.) These files are truncated to the 120 most recent toots on every run so they will not grow large. 
+Several files are generated in the same directory as the `masto-pinb.py` Python script.  In order to avoid duplicating Pinboard API calls, the IDs of recently-bookmarked toots are stored in the local text files `cached_bmarks.secret`, `cached_toots.secret`, and `cached_favs.secret`. (Though not particularly sensitive, these have the `.secret` extension so that git will ignore them via `.gitignore`.) These files are truncated to the 120 most recent toots on every run so they will not grow large. 
 
-If the `--log_json` command line argument is specified, every bookmarked toot is also stored locally, appended to the appropriate json file named `toots.json`, `favs.json`, and `bmarks.json`. The size of these filese is not managed and they may grow large. 
+If the `--log_json` command line argument is specified, every bookmarked toot is also stored locally, appended to the appropriate json file named `toots.json`, `favs.json`, and `bmarks.json`. The size of these files is not managed and they may grow large. 
