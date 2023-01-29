@@ -20,7 +20,7 @@ optional arguments:
   --get_last GET_LAST  retrieve only last n toots (default=20)
   ```
 
-It is designed to be run periodically in a cron job. The period
+It is designed to be run periodically. The period
 between runs depends on your profligacy as a tooter and how much
 latency you care about between when you post and when a toot is
 bookmarked. Running this often will retrieve (but not bookmark)
@@ -29,7 +29,10 @@ increase latency, but decrease API usage and possibly miss toots. You
 may increase the GET_LAST value if you think you will generate more
 than the default 20 toots returned by the API between runs. I am not a
 heavy tooter so I use the `@hourly` crontab shortcut to run it hourly,
-with the default 20 toot recall.
+with the default 20 toot recall. 
+
+This does not use the Mastodon pagination API so at most the 40 last toots (`--get_last 40`) can be retrieved on any run, 
+including the first run. To backup more of your history requires more work than this simple script. 
 
 The Mastodon.social instance is rate-limited to something like 300
 calls per 5 minutes. This script uses 3 calls at most per run; if the
@@ -43,7 +46,7 @@ account authorized in the `usercred.secret` file, as well as all toots
 favorited and bookmarked by that user. This can be changed by any
 combination of the `--toots`, `--bmarks`, and `--favs` command line
 options; for example using only`--favs` will bookmark only favorites,
-while `--toots --bmarks` wil bookmark toots and bookmarks but not
+while `--toots --bmarks` wil bookmark user toots and bookmarks but not
 favorites.
  
 Libraries and credentials for Pinboard and Mastodon
