@@ -12,20 +12,42 @@ Arguments for Mastodon-Pinboard bookmarker app
 optional arguments:
   -h, --help           show this help message and exit
   --toots              Bookmark user toots
-  --log_json           Log toots in JSON format to file
+  --log_json           Log toots in JSON format to local file
   --favs               Bookmark user favorites
   --bmarks             Bookmark user Mastodon bookmarks
   --dry_run            Dry run: don't actually bookmark anything
   --verbose            Print actions as they occur
   --get_last GET_LAST  retrieve only last n toots (default=20)
   ```
- It is designed to be run periodically in a cron job.  I use the `@hourly` shortcut to run it hourly, you may run it more often to decrease latency or if you are a prolific tooter. You may also increase the GET_LAST value if you think you will generate more than the default 20 toots returned by the API between times when the script is run. The Mastodon.social instance is rate-limited to something like 300 calls per 5 minutes. This script uses 3 calls at most per run; if the rate limit is exceeded it will exit with an exception. The Pinboard rate limit is not documented. 
+
+It is designed to be run periodically in a cron job. The period
+between runs depends on your profligacy as a tooter and how much
+latency you care about between when you post and when a toot is
+bookmarked. Running this often will retrieve (but not bookmark)
+redundant toots, but decrease latency; running it less often will
+increase latency, but decrease API usage and possibly miss toots. You
+may increase the GET_LAST value if you think you will generate more
+than the default 20 toots returned by the API between runs. I am not a
+heavy tooter so I use the `@hourly` crontab shortcut to run it hourly,
+with the default 20 toot recall.
+
+The Mastodon.social instance is rate-limited to something like 300
+calls per 5 minutes. This script uses 3 calls at most per run; if the
+rate limit is exceeded it will exit with an exception -- this is fine
+as the script should pick up the unbookmarked posts on its next
+invocation. The Pinboard rate limit is not documented that I could
+find.
  
-  By default the script will bookmark all toots associated with the account authorized in the `usercred.secret` file, as well as all toots favorited and bookmarked by that user. This can be changed by any combination of the
- `--toots`, `--bmarks`, and `--favs` command line options; for example using  only`--favs` will bookmark only favorites, while `--toots --bmarks` wil bookmark toots and bookmarks but not favorites. 
+By default the script will bookmark all toots associated with the
+account authorized in the `usercred.secret` file, as well as all toots
+favorited and bookmarked by that user. This can be changed by any
+combination of the `--toots`, `--bmarks`, and `--favs` command line
+options; for example using only`--favs` will bookmark only favorites,
+while `--toots --bmarks` wil bookmark toots and bookmarks but not
+favorites.
  
- Libraries and credentials for Pinboard and Mastodon
- ---
+Libraries and credentials for Pinboard and Mastodon
+---
 
 `pip3 install Mastodon.py` will install the required Mastodon Python libraries, 
 

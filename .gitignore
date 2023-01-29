@@ -1,5 +1,6 @@
 # local secrets and temp files
 *.secret
+register_app.py
 
 # emacs
 *~

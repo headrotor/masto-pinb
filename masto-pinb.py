@@ -6,11 +6,11 @@
 # https://mastodonpy.readthedocs.io/en/stable/
 from mastodon import Mastodon
 
-#pip install "pinboard>=2.0"
+#pip3 install "pinboard>=2.0"
 import pinboard
 
 # https://github.com/Alir3z4/html2text
-# pip install html2text
+# pip3 install html2text
 import html2text
 
 # standard libraries
@@ -49,7 +49,7 @@ parser = argparse.ArgumentParser(description='Arguments for Mastodon-Pinboard bo
 
 parser.add_argument('--toots', dest='toots', action='store_true', help="Bookmark user toots")
 
-parser.add_argument('--log_json', dest='log_json', action='store_true', help="Log toots in JSON format to file")
+parser.add_argument('--log_json', dest='log_json', action='store_true', help="Log toots in JSON format to local file")
 
 parser.add_argument('--favs', dest='favs', action='store_true', help="Bookmark user favorites")
 
@@ -172,9 +172,10 @@ for mode in modes:
             if args.log_json:
                 with open(f'{mode}.json', 'a') as jsonfile:
                     json.dump(toot, jsonfile, default=str)
-                
-            # make short description
+                    # so we can look at it in a text editor
+                    jsonfile.write("\n")
 
+            # make short description
             if mode == 'favs':
                 short_desc = f"Fav toot from {toot['account']['username']}"
             elif mode == 'toots':
