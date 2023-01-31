@@ -1,7 +1,9 @@
-# masto-pinb.py
-Mastodon To Pinboard bookmark integration script.
+Mastodon-to-Pinboard Automatic Bookmarking Script
+===
 
-This is a Python script meant to be run repeatedly as a crontab job. It reads the latest toots from a [Mastodon](http://mastodon.social) account and bookmarks them in a [Pinboard.in](http://pinboard.in) account. 
+This is a Python script to mimic the functionality of Pinboard's Twitter integration. 
+It reads the latest toots from a [Mastodon](http://mastodon.social) account and bookmarks them in a [Pinboard.in](http://pinboard.in) account. 
+It is meant to be run repeatedly as a crontab job to continuosly update your bookmarks in the background. 
 
 ```
 usage: python3 masto-pinb.py [-h] [--toots] [--log_json] [--favs] [--bmarks]
