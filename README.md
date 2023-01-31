@@ -1,5 +1,5 @@
 # masto-pinb.py
-Mastodon To Pinboard bookmark integration script
+Mastodon To Pinboard bookmark integration script.
 
 This is a Python script meant to be run repeatedly as a crontab job. It reads the latest toots from a [Mastodon](http://mastodon.social) account and bookmarks them in a [Pinboard.in](http://pinboard.in) account. 
 
@@ -20,7 +20,7 @@ optional arguments:
   --get_last GET_LAST  retrieve only last n toots (default=20)
   ```
 
-It is designed to be run periodically in a cron job. The period
+It is designed to be run periodically. The period
 between runs depends on your profligacy as a tooter and how much
 latency you care about between when you post and when a toot is
 bookmarked. Running this often will retrieve (but not bookmark)
@@ -29,20 +29,24 @@ increase latency, but decrease API usage and possibly miss toots. You
 may increase the GET_LAST value if you think you will generate more
 than the default 20 toots returned by the API between runs. I am not a
 heavy tooter so I use the `@hourly` crontab shortcut to run it hourly,
-with the default 20 toot recall.
+with the default 20 toot recall. 
+
+This does not use the Mastodon pagination API so at most the 40 last toots (`--get_last 40`) can be retrieved on any run, 
+including the first run. To backup more of your history requires more work than this simple script. 
 
 The Mastodon.social instance is rate-limited to something like 300
 calls per 5 minutes. This script uses 3 calls at most per run; if the
 rate limit is exceeded it will exit with an exception -- this is fine
 as the script should pick up the unbookmarked posts on its next
-invocation. 
+invocation. The Pinboard rate limit is not documented that I could
+find.
  
 By default the script will bookmark all toots associated with the
 account authorized in the `usercred.secret` file, as well as all toots
 favorited and bookmarked by that user. This can be changed by any
 combination of the `--toots`, `--bmarks`, and `--favs` command line
 options; for example using only`--favs` will bookmark only favorites,
-while `--toots --bmarks` wil bookmark toots and bookmarks but not
+while `--toots --bmarks` wil bookmark user toots and bookmarks but not
 favorites.
  
 Libraries and credentials for Pinboard and Mastodon
@@ -62,15 +66,18 @@ The Mastodon user credential file is stored as `masto_pinb_usercred.secret` and 
 
 Generated Files
 ---
-Several files are generated in the same directory as the `masto-pinb.py` Python script.  In order to avoid duplicating Pinboard API calls, the IDs of recently-bookmarked toots are stored in the local text files `cached_bmarks.secret`, `cached_toots.secret`, and `cached_favs.secret`. (Though not particulalry sensitive, these have the `.secret` extension so that git will ignore them via `.gitignore`.) These files are truncated to the 120 most recent toots on every run so they will not grow large. 
+Several files are generated in the same directory as the `masto-pinb.py` Python script.  In order to avoid duplicating Pinboard API calls, the IDs of recently-bookmarked toots are stored in the local text files `cached_bmarks.secret`, `cached_toots.secret`, and `cached_favs.secret`. (Though not particularly sensitive, these have the `.secret` extension so that git will ignore them via `.gitignore`.) These files are truncated to the 120 most recent toots on every run so they will not grow large. 
 
-If the `--log_json` command line argument is specified, every bookmarked toot is also stored locally, appended to the appropriate json file named `toots.json`, `favs.json`, and `bmarks.json`. The size of these filese is not managed and they may grow large. 
-
+If the `--log_json` command line argument is specified, every bookmarked toot is also stored locally, appended to the appropriate json file named `toots.json`, `favs.json`, and `bmarks.json`. The size of these files is not managed and they may grow large. 
 
 Mastodon Archiver
 ===
 
-The script `masto-backup.py` will archive your posts, favorites, and/or bookmarks as text json files. It needs a Mastodon credential file as above (`masto_pinb_usercred.secret`) but does not need Pinboard credentials. It uses the paging functions of the API and will pace requests to not exceed API rate limits.
+The script `masto-backup.py` will archive your posts, favorites,
+and/or bookmarks as text json files. It needs a Mastodon credential
+file as above (`masto_pinb_usercred.secret`) but does not need
+Pinboard credentials. It uses the paging functions of the API and will
+pace requests to not exceed API rate limits.
 
 Usage: `python3 masto-backup.py`
 
@@ -90,4 +97,7 @@ optional arguments:
 
 ```
 
-If none of `--toots`, `--favs`, and/or `--bmarks` is specified, all are assumend and will be archived in seperate files. Json output files are named `MODE-backupYYYY-MM-DD.json` where MODE is one of `toots`, `favs`, and/or `bmarks` depending on command line arguments. 
+If none of `--toots`, `--favs`, and/or `--bmarks` is specified, all
+are assumend and will be archived in seperate files. Json output files
+are named `MODE-backupYYYY-MM-DD.json` where MODE is one of `toots`,
+`favs`, and/or `bmarks` depending on command line arguments.
