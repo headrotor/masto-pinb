@@ -35,8 +35,7 @@ The Mastodon.social instance is rate-limited to something like 300
 calls per 5 minutes. This script uses 3 calls at most per run; if the
 rate limit is exceeded it will exit with an exception -- this is fine
 as the script should pick up the unbookmarked posts on its next
-invocation. The Pinboard rate limit is not documented that I could
-find.
+invocation. 
  
 By default the script will bookmark all toots associated with the
 account authorized in the `usercred.secret` file, as well as all toots
@@ -66,3 +65,29 @@ Generated Files
 Several files are generated in the same directory as the `masto-pinb.py` Python script.  In order to avoid duplicating Pinboard API calls, the IDs of recently-bookmarked toots are stored in the local text files `cached_bmarks.secret`, `cached_toots.secret`, and `cached_favs.secret`. (Though not particulalry sensitive, these have the `.secret` extension so that git will ignore them via `.gitignore`.) These files are truncated to the 120 most recent toots on every run so they will not grow large. 
 
 If the `--log_json` command line argument is specified, every bookmarked toot is also stored locally, appended to the appropriate json file named `toots.json`, `favs.json`, and `bmarks.json`. The size of these filese is not managed and they may grow large. 
+
+
+Mastodon Archiver
+===
+
+The script `masto-backup.py` will archive your posts, favorites, and/or bookmarks as text json files. It needs a Mastodon credential file as above (`masto_pinb_usercred.secret`) but does not need Pinboard credentials. It uses the paging functions of the API and will pace requests to not exceed API rate limits.
+
+Usage: `python3 masto-backup.py`
+
+```
+optional arguments:
+  -h, --help            show this help message and exit
+  --toots               Bookmark user toots
+  --favs                Bookmark user favorites
+  --bmarks              Bookmark user Mastodon bookmarks
+  --verbose             Print actions as they occur
+  --all_pages           Tries to get all pages available. May take some time!
+  --get_last GET_LAST   retrieve only GET_LAST toots per page (default=40)
+  --get_n_pages GET_NPAGES
+                        retrieve N_PAGES pages (default = 1). Ignored with --all_pages
+  --page_wait PAGE_WAIT
+                        wait WAIT_SECONDS between page requests to stay inside API limits (default= 1.0
+
+```
+
+If none of `--toots`, `--favs`, and/or `--bmarks` is specified, all are assumend and will be archived in seperate files. Json output files are named `MODE-backupYYYY-MM-DD.json` where MODE is one of `toots`, `favs`, and/or `bmarks` depending on command line arguments. 

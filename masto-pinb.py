@@ -34,14 +34,6 @@ max_history = 120
 masto_cred_file = 'masto_pinb_usercred.secret'
 pinboard_cred_file = 'pinboard_auth.secret'
 
-
-# cache ids of bookmarked toots in these files to help
-# prevent duplicate bookmarks
-# (Pinboard is OK with that but let's not anyway ;)
-last_masto_favs_file = 'last_masto_favs.secret'
-last_masto_toot_file = 'last_masto_toot.secret'
-
-
 # number of previous toots to retrieve. Change this with the --get_last option
 get_last = 20
 
@@ -119,6 +111,9 @@ h2t.ignore_links = False
 for mode in modes:
     print(f"processing {mode}")
 
+    # cache ids of bookmarked toots in these files to help
+    # prevent duplicate bookmarks the next time we run this
+    # (Pinboard is OK with that but let's not anyway ;)
     cache_file_name = f"cached_{mode}_ids.secret" 
     
     # read list of already-bookmarked toot IDs from file
@@ -149,11 +144,7 @@ for mode in modes:
                                           exclude_replies=False,
                                           exclude_reblogs=True,
                                           tagged=None,
-                                          max_id=None,
-                                          min_id=None,
-                                          since_id=None,
                                           limit=get_last)
-
         
     # sort toots by ID so they are in quasi-temporal order
     toots = sorted(toots, key=lambda f: int(f['id']))
@@ -168,7 +159,7 @@ for mode in modes:
             if args.verbose:
                 print(f"Bookmarking toot {this_id}")
 
-            # if we are logging toots, save data to file in JSON format
+            # if we are archiving toots, save data to file in JSON format
             if args.log_json:
                 with open(f'{mode}.json', 'a') as jsonfile:
                     json.dump(toot, jsonfile, default=str)
@@ -205,7 +196,7 @@ for mode in modes:
                     cached_ids.append(this_id)
                     bookmarked_count += 1
             else:
-                print(f"Dry run bookmarking {mode} toot {this_id}")
+                print(f"Dry run bookmarking {mode} id {this_id}")
 
     # write back list of bookmarked IDs to cache file
     if bookmarked_count > 0:
