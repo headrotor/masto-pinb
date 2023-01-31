@@ -4,7 +4,7 @@ Mastodon To Pinboard bookmark integration script.
 This is a Python script meant to be run repeatedly as a crontab job. It reads the latest toots from a [Mastodon](http://mastodon.social) account and bookmarks them in a [Pinboard.in](http://pinboard.in) account. 
 
 ```
-usage: masto-pinb.py [-h] [--toots] [--log_json] [--favs] [--bmarks]
+usage: python3 masto-pinb.py [-h] [--toots] [--log_json] [--favs] [--bmarks]
                      [--dry_run] [--verbose] [--get_last GET_LAST]
 
 Arguments for Mastodon-Pinboard bookmarker app
@@ -32,7 +32,7 @@ heavy tooter so I use the `@hourly` crontab shortcut to run it hourly,
 with the default 20 toot recall. 
 
 This does not use the Mastodon pagination API so at most the 40 last toots (`--get_last 40`) can be retrieved on any run, 
-including the first run. To backup more of your history requires more work than this simple script. 
+including the first run. To backup more of your history, use the `masto-backup.py` script described below.
 
 The Mastodon.social instance is rate-limited to something like 300
 calls per 5 minutes. This script uses 3 calls at most per run; if the
@@ -79,9 +79,13 @@ file as above (`masto_pinb_usercred.secret`) but does not need
 Pinboard credentials. It uses the paging functions of the API and will
 pace requests to not exceed API rate limits.
 
-Usage: `python3 masto-backup.py`
-
 ```
+usage: python3 masto-backup.py [-h] [--toots] [--favs] [--bmarks] [--verbose]
+                       [--all_pages] [--get_last GET_LAST]
+                       [--get_n_pages GET_NPAGES] [--page_wait PAGE_WAIT]
+
+Arguments for Mastodon backup app
+
 optional arguments:
   -h, --help            show this help message and exit
   --toots               Bookmark user toots
@@ -98,6 +102,6 @@ optional arguments:
 ```
 
 If none of `--toots`, `--favs`, and/or `--bmarks` is specified, all
-are assumend and will be archived in seperate files. Json output files
+are assumend and each will be archived in seperate files. Json output files
 are named `MODE-backupYYYY-MM-DD.json` where MODE is one of `toots`,
 `favs`, and/or `bmarks` depending on command line arguments.
