@@ -81,6 +81,9 @@ file as above (`masto_pinb_usercred.secret`) but does not need
 Pinboard credentials. It uses the paging functions of the API and will
 pace requests to not exceed API rate limits.
 
+This is likely not as useful as the [native Mastodon exporter](https://docs.joinmastodon.org/user/moving/#export), but might be handy as a scaffold for your own exploration.
+(Yes there's a lot of code reuse here with the bookmarking script, but they are just different enough that I duplicated instead of modularized.)
+
 ```
 usage: python3 masto-backup.py [-h] [--toots] [--favs] [--bmarks] [--verbose]
                        [--all_pages] [--get_last GET_LAST]
