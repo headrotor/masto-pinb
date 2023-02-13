@@ -177,11 +177,15 @@ for mode in modes:
             # get extended description
             ext_desc = h2t.handle(toot['content'])
 
+            # long descriptions can fail with a 414 error, so truncate
+            if len(ext_desc) > 280:
+                ext_desc = ext_desc[1:280]
+            
             # URL of this toot
             url = toot['url']
             
             # add mastodon ID to description for debug 
-            ext_desc += f"mast-id:{toot['id']}"    
+            ext_desc += f"\nmast-id:{toot['id']}"    
             if args.verbose:
                 print(ext_desc)
 
@@ -195,6 +199,9 @@ for mode in modes:
                 if status:
                     cached_ids.append(this_id)
                     bookmarked_count += 1
+                else:
+                    print(status)
+                    continue
             else:
                 print(f"Dry run bookmarking {mode} id {this_id}")
 
