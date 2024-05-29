@@ -179,7 +179,7 @@ for mode in modes:
 
             # long descriptions can fail with a 414 error, so truncate
             if len(ext_desc) > 280:
-                ext_desc = ext_desc[1:280]
+                ext_desc = ext_desc[0:279]
             
             # URL of this toot
             url = toot['url']
